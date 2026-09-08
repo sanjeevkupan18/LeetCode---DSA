@@ -3,41 +3,75 @@ import java.util.*;
 class Solution {
     public List<List<Integer>> fourSum(int[] nums, int target) {
 
-        Set<List<Integer>> result = new HashSet<>();
+        List<List<Integer>> result = new ArrayList<>();
 
         int n = nums.length;
 
-        for (int a = 0; a < n - 3; a++) {
+        // Step 1: Sort the array
+        Arrays.sort(nums);
 
-            for (int b = a + 1; b < n - 2; b++) {
+        // Step 2: Fix first element
+        for (int i = 0; i < n - 3; i++) {
 
-                Set<Long> seen = new HashSet<>();
+            // Skip duplicate first elements
+            if (i > 0 && nums[i] == nums[i - 1]) {
+                continue;
+            }
 
-                for (int c = b + 1; c < n; c++) {
+            // Step 3: Fix second element
+            for (int j = i + 1; j < n - 2; j++) {
 
-                    long required = (long) target
-                            - nums[a]
-                            - nums[b]
-                            - nums[c];
+                // Skip duplicate second elements
+                if (j > i + 1 && nums[j] == nums[j - 1]) {
+                    continue;
+                }
 
-                    if (seen.contains(required)) {
+                int left = j + 1;
+                int right = n - 1;
 
-                        List<Integer> quad = Arrays.asList(
-                                nums[a],
-                                nums[b],
-                                (int) required,
-                                nums[c]
-                        );
+                // Step 4: Two pointer approach
+                while (left < right) {
 
-                        Collections.sort(quad);
-                        result.add(quad);
+                    long sum = (long) nums[i]
+                             + nums[j]
+                             + nums[left]
+                             + nums[right];
+
+                    if (sum == target) {
+
+                        result.add(Arrays.asList(
+                                nums[i],
+                                nums[j],
+                                nums[left],
+                                nums[right]
+                        ));
+
+                        left++;
+                        right--;
+
+                        // Skip duplicates
+                        while (left < right &&
+                               nums[left] == nums[left - 1]) {
+                            left++;
+                        }
+
+                        while (left < right &&
+                               nums[right] == nums[right + 1]) {
+                            right--;
+                        }
+
+                    } else if (sum < target) {
+
+                        left++;
+
+                    } else {
+
+                        right--;
                     }
-
-                    seen.add((long) nums[c]);
                 }
             }
         }
 
-        return new ArrayList<>(result);
+        return result;
     }
 }
