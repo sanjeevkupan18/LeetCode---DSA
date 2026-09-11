@@ -1,44 +1,29 @@
 class Solution {
     public int[][] merge(int[][] intervals) {
 
-        boolean[] removed = new boolean[intervals.length];
+        // Sort by starting point
+        Arrays.sort(intervals, (a, b) -> Integer.compare(a[0], b[0]));
+
         List<int[]> result = new ArrayList<>();
 
-        for (int i = 0; i < intervals.length; i++) {
+        // Add first interval
+        result.add(intervals[0]);
 
-            if (removed[i]) {
-                continue;
+        for (int i = 1; i < intervals.length; i++) {
+
+            int[] current = intervals[i];
+            int[] last = result.get(result.size() - 1);
+
+            // Overlapping intervals
+            if (current[0] <= last[1]) {
+
+                last[1] = Math.max(last[1], current[1]);
+
+            } else {
+
+                // Non-overlapping interval
+                result.add(current);
             }
-
-            int start = intervals[i][0];
-            int end = intervals[i][1];
-
-            boolean merged;
-
-            do {
-                merged = false;
-
-                for (int j = 0; j < intervals.length; j++) {
-
-                    if (i == j || removed[j]) {
-                        continue;
-                    }
-
-                    // Check overlap
-                    if (start <= intervals[j][1] &&
-                        intervals[j][0] <= end) {
-
-                        start = Math.min(start, intervals[j][0]);
-                        end = Math.max(end, intervals[j][1]);
-
-                        removed[j] = true;
-                        merged = true;
-                    }
-                }
-
-            } while (merged);
-
-            result.add(new int[]{start, end});
         }
 
         return result.toArray(new int[result.size()][]);
