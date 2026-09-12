@@ -14,25 +14,11 @@ class Solution {
 
         int count = 0;
 
-        // Count reverse pairs in left half
         count += mergeSort(nums, left, mid);
-
-        // Count reverse pairs in right half
         count += mergeSort(nums, mid + 1, right);
 
-        // Count reverse pairs across both halves
-        count += countReversePairs(nums, left, mid, right);
-
-        // Merge the two sorted halves
-        merge(nums, left, mid, right);
-
-        return count;
-    }
-
-    private int countReversePairs(int[] nums, int left, int mid, int right) {
-
+        // Count cross reverse pairs
         int j = mid + 1;
-        int count = 0;
 
         for (int i = left; i <= mid; i++) {
 
@@ -43,6 +29,9 @@ class Solution {
 
             count += j - (mid + 1);
         }
+
+        // Merge
+        merge(nums, left, mid, right);
 
         return count;
     }
