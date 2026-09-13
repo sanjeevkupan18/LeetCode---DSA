@@ -2,30 +2,20 @@ class Solution {
     public int[] rearrangeArray(int[] nums) {
 
         int n = nums.length;
+        int[] ans = new int[n];
 
-        int[] positive = new int[n / 2];
-        int[] negative = new int[n / 2];
+        int positiveIndex = 0;
+        int negativeIndex = 1;
 
-        int p = 0;
-        int neg = 0;
-
-        // Separate positive and negative numbers
         for (int num : nums) {
 
             if (num > 0) {
-                positive[p++] = num;
+                ans[positiveIndex] = num;
+                positiveIndex += 2;
             } else {
-                negative[neg++] = num;
+                ans[negativeIndex] = num;
+                negativeIndex += 2;
             }
-        }
-
-        int[] ans = new int[n];
-
-        // Alternate positive and negative
-        for (int i = 0; i < n / 2; i++) {
-
-            ans[2 * i] = positive[i];
-            ans[2 * i + 1] = negative[i];
         }
 
         return ans;
