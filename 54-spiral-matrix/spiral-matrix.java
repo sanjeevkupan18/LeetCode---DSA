@@ -8,37 +8,40 @@ class Solution {
 
         List<Integer> result = new ArrayList<>();
 
-        boolean[][] visited = new boolean[m][n];
+        int top = 0;
+        int bottom = m - 1;
+        int left = 0;
+        int right = n - 1;
 
-        // Right, Down, Left, Up
-        int[] dr = {0, 1, 0, -1};
-        int[] dc = {1, 0, -1, 0};
+        while (top <= bottom && left <= right) {
 
-        int row = 0;
-        int col = 0;
-        int direction = 0;
+            // Traverse top row
+            for (int col = left; col <= right; col++) {
+                result.add(matrix[top][col]);
+            }
+            top++;
 
-        for (int i = 0; i < m * n; i++) {
+            // Traverse right column
+            for (int row = top; row <= bottom; row++) {
+                result.add(matrix[row][right]);
+            }
+            right--;
 
-            result.add(matrix[row][col]);
-            visited[row][col] = true;
-
-            int nextRow = row + dr[direction];
-            int nextCol = col + dc[direction];
-
-            // Change direction if next cell is invalid or already visited
-            if (nextRow < 0 || nextRow >= m ||
-                nextCol < 0 || nextCol >= n ||
-                visited[nextRow][nextCol]) {
-
-                direction = (direction + 1) % 4;
-
-                nextRow = row + dr[direction];
-                nextCol = col + dc[direction];
+            // Traverse bottom row
+            if (top <= bottom) {
+                for (int col = right; col >= left; col--) {
+                    result.add(matrix[bottom][col]);
+                }
+                bottom--;
             }
 
-            row = nextRow;
-            col = nextCol;
+            // Traverse left column
+            if (left <= right) {
+                for (int row = bottom; row >= top; row--) {
+                    result.add(matrix[row][left]);
+                }
+                left++;
+            }
         }
 
         return result;
