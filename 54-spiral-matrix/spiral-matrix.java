@@ -3,31 +3,28 @@ import java.util.*;
 class Solution {
     public List<Integer> spiralOrder(int[][] matrix) {
 
-        int m = matrix.length;
-        int n = matrix[0].length;
-
         List<Integer> result = new ArrayList<>();
 
         int top = 0;
-        int bottom = m - 1;
+        int bottom = matrix.length - 1;
         int left = 0;
-        int right = n - 1;
+        int right = matrix[0].length - 1;
 
         while (top <= bottom && left <= right) {
 
-            // Traverse top row
+            // 1. Left → Right
             for (int col = left; col <= right; col++) {
                 result.add(matrix[top][col]);
             }
             top++;
 
-            // Traverse right column
+            // 2. Top → Bottom
             for (int row = top; row <= bottom; row++) {
                 result.add(matrix[row][right]);
             }
             right--;
 
-            // Traverse bottom row
+            // 3. Right → Left
             if (top <= bottom) {
                 for (int col = right; col >= left; col--) {
                     result.add(matrix[bottom][col]);
@@ -35,7 +32,7 @@ class Solution {
                 bottom--;
             }
 
-            // Traverse left column
+            // 4. Bottom → Top
             if (left <= right) {
                 for (int row = bottom; row >= top; row--) {
                     result.add(matrix[row][left]);
