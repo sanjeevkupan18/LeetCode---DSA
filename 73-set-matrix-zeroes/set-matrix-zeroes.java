@@ -3,27 +3,57 @@ class Solution {
         int m = matrix.length;
         int n = matrix[0].length;
 
-        boolean[] row = new boolean[m];
-        boolean[] col = new boolean[n];
+        boolean firstRowZero = false;
+        boolean firstColZero = false;
 
-        // Find rows and columns that need to be zeroed
+        // Check if first row contains zero
+        for (int j = 0; j < n; j++) {
+            if (matrix[0][j] == 0) {
+                firstRowZero = true;
+                break;
+            }
+        }
+
+        // Check if first column contains zero
         for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+            if (matrix[i][0] == 0) {
+                firstColZero = true;
+                break;
+            }
+        }
+
+        // Use first row and first column as markers
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
 
                 if (matrix[i][j] == 0) {
-                    row[i] = true;
-                    col[j] = true;
+                    matrix[i][0] = 0;
+                    matrix[0][j] = 0;
                 }
             }
         }
 
-        // Set cells to zero
-        for (int i = 0; i < m; i++) {
-            for (int j = 0; j < n; j++) {
+        // Set inner matrix cells to zero
+        for (int i = 1; i < m; i++) {
+            for (int j = 1; j < n; j++) {
 
-                if (row[i] || col[j]) {
+                if (matrix[i][0] == 0 || matrix[0][j] == 0) {
                     matrix[i][j] = 0;
                 }
+            }
+        }
+
+        // Zero first row if required
+        if (firstRowZero) {
+            for (int j = 0; j < n; j++) {
+                matrix[0][j] = 0;
+            }
+        }
+
+        // Zero first column if required
+        if (firstColZero) {
+            for (int i = 0; i < m; i++) {
+                matrix[i][0] = 0;
             }
         }
     }
