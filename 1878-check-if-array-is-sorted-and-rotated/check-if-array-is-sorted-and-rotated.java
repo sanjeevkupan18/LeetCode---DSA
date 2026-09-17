@@ -1,25 +1,18 @@
 class Solution {
     public boolean check(int[] nums) {
         int n = nums.length;
+        int count = 0;
 
-        for (int rotation = 0; rotation < n; rotation++) {
-            boolean sorted = true;
-
-            for (int i = 0; i < n - 1; i++) {
-                int current = nums[(i + rotation) % n];
-                int next = nums[(i + 1 + rotation) % n];
-
-                if (current > next) {
-                    sorted = false;
-                    break;
-                }
+        for (int i = 0; i < n; i++) {
+            if (nums[i] > nums[(i + 1) % n]) {
+                count++;
             }
 
-            if (sorted) {
-                return true;
+            if (count > 1) {
+                return false;
             }
         }
 
-        return false;
+        return true;
     }
 }
