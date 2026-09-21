@@ -4,12 +4,21 @@ class Solution {
             return x;
         }
 
-        for (long i = 1; i <= x; i++) {
-            if (i * i > x) {
-                return (int) (i - 1);
+        long left = 1;
+        long right = x / 2;
+        long answer = 1;
+
+        while (left <= right) {
+            long mid = left + (right - left) / 2;
+
+            if (mid * mid <= x) {
+                answer = mid;
+                left = mid + 1;
+            } else {
+                right = mid - 1;
             }
         }
 
-        return x;
+        return (int) answer;
     }
 }
