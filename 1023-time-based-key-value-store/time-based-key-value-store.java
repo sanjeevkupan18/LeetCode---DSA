@@ -19,6 +19,7 @@ class TimeMap {
     }
 
     public void set(String key, String value, int timestamp) {
+
         map.computeIfAbsent(key, k -> new ArrayList<>())
            .add(new Pair(value, timestamp));
     }
@@ -31,13 +32,30 @@ class TimeMap {
 
         List<Pair> list = map.get(key);
 
-        for (int i = list.size() - 1; i >= 0; i--) {
+        int left = 0;
+        int right = list.size() - 1;
 
-            if (list.get(i).timestamp <= timestamp) {
-                return list.get(i).value;
+        String answer = "";
+
+        while (left <= right) {
+
+            int mid = left + (right - left) / 2;
+
+            if (list.get(mid).timestamp <= timestamp) {
+
+                // This timestamp is valid.
+                // But there might be a larger valid timestamp.
+                answer = list.get(mid).value;
+
+                left = mid + 1;
+
+            } else {
+
+                // Current timestamp is too large.
+                right = mid - 1;
             }
         }
 
-        return "";
+        return answer;
     }
 }
