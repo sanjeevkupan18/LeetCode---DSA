@@ -1,33 +1,29 @@
 class Solution {
     public int[] intersection(int[] nums1, int[] nums2) {
-        int[] temp = new int[Math.min(nums1.length, nums2.length)];
-        int k = 0;
 
-        for (int i = 0; i < nums1.length; i++) {
-            boolean found = false;
+        HashSet<Integer> set1 = new HashSet<>();
+        HashSet<Integer> result = new HashSet<>();
 
-            // Check if nums1[i] exists in nums2
-            for (int j = 0; j < nums2.length; j++) {
-                if (nums1[i] == nums2[j]) {
-                    found = true;
-                    break;
-                }
-            }
+        // Store nums1 elements
+        for (int num : nums1) {
+            set1.add(num);
+        }
 
-            // Check if already added
-            boolean alreadyPresent = false;
-            for (int j = 0; j < k; j++) {
-                if (temp[j] == nums1[i]) {
-                    alreadyPresent = true;
-                    break;
-                }
-            }
-
-            if (found && !alreadyPresent) {
-                temp[k++] = nums1[i];
+        // Find intersection
+        for (int num : nums2) {
+            if (set1.contains(num)) {
+                result.add(num);
             }
         }
 
-        return Arrays.copyOf(temp, k);
+        // Convert Set to int[]
+        int[] ans = new int[result.size()];
+        int i = 0;
+
+        for (int num : result) {
+            ans[i++] = num;
+        }
+
+        return ans;
     }
 }
