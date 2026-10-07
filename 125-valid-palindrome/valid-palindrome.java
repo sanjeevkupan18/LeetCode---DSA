@@ -1,19 +1,22 @@
 class Solution {
     public boolean isPalindrome(String s) {
-        StringBuilder cleaned = new StringBuilder();
-
-        // Create cleaned string
-        for (char ch : s.toCharArray()) {
-            if (Character.isLetterOrDigit(ch)) {
-                cleaned.append(Character.toLowerCase(ch));
-            }
-        }
-
         int left = 0;
-        int right = cleaned.length() - 1;
+        int right = s.length() - 1;
 
         while (left < right) {
-            if (cleaned.charAt(left) != cleaned.charAt(right)) {
+
+            // Skip non-alphanumeric characters
+            while (left < right && !Character.isLetterOrDigit(s.charAt(left))) {
+                left++;
+            }
+
+            while (left < right && !Character.isLetterOrDigit(s.charAt(right))) {
+                right--;
+            }
+
+            // Compare lowercase characters
+            if (Character.toLowerCase(s.charAt(left)) !=
+                Character.toLowerCase(s.charAt(right))) {
                 return false;
             }
 
