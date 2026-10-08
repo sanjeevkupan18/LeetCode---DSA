@@ -4,20 +4,15 @@ class Solution {
             return false;
         }
 
-        HashMap<Character, Integer> map = new HashMap<>();
+        int[] frequency = new int[26];
 
-        for (char ch : s.toCharArray()) {
-            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        for (int i = 0; i < s.length(); i++) {
+            frequency[s.charAt(i) - 'a']++;
+            frequency[t.charAt(i) - 'a']--;
         }
 
-        for (char ch : t.toCharArray()) {
-            if (!map.containsKey(ch)) {
-                return false;
-            }
-
-            map.put(ch, map.get(ch) - 1);
-
-            if (map.get(ch) < 0) {
+        for (int count : frequency) {
+            if (count != 0) {
                 return false;
             }
         }
