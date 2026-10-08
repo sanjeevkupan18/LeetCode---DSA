@@ -4,12 +4,24 @@ class Solution {
             return false;
         }
 
-        char[] sArr = s.toCharArray();
-        char[] tArr = t.toCharArray();
+        HashMap<Character, Integer> map = new HashMap<>();
 
-        Arrays.sort(sArr);
-        Arrays.sort(tArr);
+        for (char ch : s.toCharArray()) {
+            map.put(ch, map.getOrDefault(ch, 0) + 1);
+        }
 
-        return Arrays.equals(sArr, tArr);
+        for (char ch : t.toCharArray()) {
+            if (!map.containsKey(ch)) {
+                return false;
+            }
+
+            map.put(ch, map.get(ch) - 1);
+
+            if (map.get(ch) < 0) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
