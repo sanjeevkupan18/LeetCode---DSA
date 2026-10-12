@@ -1,20 +1,15 @@
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
     public int firstUniqChar(String s) {
-        Map<Character, Integer> frequency = new HashMap<>();
+        int[] frequency = new int[26];
 
         // Step 1: Count the frequency of each character
         for (int i = 0; i < s.length(); i++) {
-            char ch = s.charAt(i);
-
-            frequency.put(ch, frequency.getOrDefault(ch, 0) + 1);
+            frequency[s.charAt(i) - 'a']++;
         }
 
         // Step 2: Find the first non-repeating character
         for (int i = 0; i < s.length(); i++) {
-            if (frequency.get(s.charAt(i)) == 1) {
+            if (frequency[s.charAt(i) - 'a'] == 1) {
                 return i;
             }
         }
