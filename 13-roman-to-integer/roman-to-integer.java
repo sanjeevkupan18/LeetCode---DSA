@@ -1,53 +1,31 @@
+import java.util.HashMap;
+import java.util.Map;
+
 class Solution {
     public int romanToInt(String s) {
-        int result = 0;
-int i = 0;
-            while (i < s.length()) {
-        if (i + 1 < s.length()) {
-            String pair = s.substring(i, i + 2);
+        Map<Character, Integer> map = new HashMap<>();
 
-            switch (pair) {
-                case "IV":
-                    result += 4;
-                    i += 2;
-                    continue;
-                case "IX":
-                    result += 9;
-                    i += 2;
-                    continue;
-                case "XL":
-                    result += 40;
-                    i += 2;
-                    continue;
-                case "XC":
-                    result += 90;
-                    i += 2;
-                    continue;
-                case "CD":
-                    result += 400;
-                    i += 2;
-                    continue;
-                case "CM":
-                    result += 900;
-                    i += 2;
-                    continue;
+        map.put('I', 1);
+        map.put('V', 5);
+        map.put('X', 10);
+        map.put('L', 50);
+        map.put('C', 100);
+        map.put('D', 500);
+        map.put('M', 1000);
+
+        int result = 0;
+
+        for (int i = 0; i < s.length(); i++) {
+            int current = map.get(s.charAt(i));
+
+            if (i + 1 < s.length()
+                    && current < map.get(s.charAt(i + 1))) {
+                result -= current;
+            } else {
+                result += current;
             }
         }
 
-        switch (s.charAt(i)) {
-            case 'I': result += 1; break;
-            case 'V': result += 5; break;
-            case 'X': result += 10; break;
-            case 'L': result += 50; break;
-            case 'C': result += 100; break;
-            case 'D': result += 500; break;
-            case 'M': result += 1000; break;
-        }
-
-        i++;
+        return result;
     }
-
-    return result;
 }
-}  
-    
