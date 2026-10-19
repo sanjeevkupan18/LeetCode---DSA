@@ -11,16 +11,20 @@ class Solution {
             return result;
         }
 
-        char[] target = p.toCharArray();
-        Arrays.sort(target);
+        int[] targetFreq = new int[26];
+
+        for (int i = 0; i < m; i++) {
+            targetFreq[p.charAt(i) - 'a']++;
+        }
 
         for (int i = 0; i <= n - m; i++) {
-            String substring = s.substring(i, i + m);
+            int[] windowFreq = new int[26];
 
-            char[] current = substring.toCharArray();
-            Arrays.sort(current);
+            for (int j = i; j < i + m; j++) {
+                windowFreq[s.charAt(j) - 'a']++;
+            }
 
-            if (Arrays.equals(current, target)) {
+            if (Arrays.equals(targetFreq, windowFreq)) {
                 result.add(i);
             }
         }
