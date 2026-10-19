@@ -12,20 +12,27 @@ class Solution {
         }
 
         int[] targetFreq = new int[26];
+        int[] windowFreq = new int[26];
 
         for (int i = 0; i < m; i++) {
             targetFreq[p.charAt(i) - 'a']++;
+            windowFreq[s.charAt(i) - 'a']++;
         }
 
-        for (int i = 0; i <= n - m; i++) {
-            int[] windowFreq = new int[26];
+        if (Arrays.equals(targetFreq, windowFreq)) {
+            result.add(0);
+        }
 
-            for (int j = i; j < i + m; j++) {
-                windowFreq[s.charAt(j) - 'a']++;
-            }
+        for (int right = m; right < n; right++) {
+            // Add the new character to the window
+            windowFreq[s.charAt(right) - 'a']++;
 
+            // Remove the character leaving the window
+            windowFreq[s.charAt(right - m) - 'a']--;
+
+            // Compare character frequencies
             if (Arrays.equals(targetFreq, windowFreq)) {
-                result.add(i);
+                result.add(right - m + 1);
             }
         }
 
