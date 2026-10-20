@@ -1,5 +1,3 @@
-import java.util.Arrays;
-
 class Solution {
     public boolean checkInclusion(String s1, String s2) {
         int n = s1.length();
@@ -9,18 +7,40 @@ class Solution {
             return false;
         }
 
-        char[] target = s1.toCharArray();
-        Arrays.sort(target);
+        int[] s1Freq = new int[26];
+        int[] windowFreq = new int[26];
 
-        for (int i = 0; i <= m - n; i++) {
-            char[] window = s2.substring(i, i + n).toCharArray();
-            Arrays.sort(window);
+        for (int i = 0; i < n; i++) {
+            s1Freq[s1.charAt(i) - 'a']++;
+            windowFreq[s2.charAt(i) - 'a']++;
+        }
 
-            if (Arrays.equals(target, window)) {
+        if (matches(s1Freq, windowFreq)) {
+            return true;
+        }
+
+        for (int i = n; i < m; i++) {
+            // Add the incoming character
+            windowFreq[s2.charAt(i) - 'a']++;
+
+            // Remove the outgoing character
+            windowFreq[s2.charAt(i - n) - 'a']--;
+
+            if (matches(s1Freq, windowFreq)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    private boolean matches(int[] a, int[] b) {
+        for (int i = 0; i < 26; i++) {
+            if (a[i] != b[i]) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
