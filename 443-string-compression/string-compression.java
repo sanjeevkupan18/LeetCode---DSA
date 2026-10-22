@@ -1,7 +1,7 @@
 class Solution {
     public int compress(char[] chars) {
-        StringBuilder sb = new StringBuilder();
         int n = chars.length;
+        int write = 0;
         int i = 0;
 
         while (i < n) {
@@ -13,17 +13,17 @@ class Solution {
                 i++;
             }
 
-            sb.append(ch);
+            chars[write++] = ch;
 
             if (count > 1) {
-                sb.append(count);
+                String countStr = String.valueOf(count);
+
+                for (int j = 0; j < countStr.length(); j++) {
+                    chars[write++] = countStr.charAt(j);
+                }
             }
         }
 
-        for (int j = 0; j < sb.length(); j++) {
-            chars[j] = sb.charAt(j);
-        }
-
-        return sb.length();
+        return write;
     }
 }
