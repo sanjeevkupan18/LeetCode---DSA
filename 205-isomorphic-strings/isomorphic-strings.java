@@ -1,25 +1,18 @@
-import java.util.HashMap;
-import java.util.Map;
-
 class Solution {
     public boolean isIsomorphic(String s, String t) {
-        Map<Character, Character> mapST = new HashMap<>();
-        Map<Character, Character> mapTS = new HashMap<>();
+        int[] lastS = new int[256];
+        int[] lastT = new int[256];
 
         for (int i = 0; i < s.length(); i++) {
             char a = s.charAt(i);
             char b = t.charAt(i);
 
-            if (mapST.containsKey(a) && mapST.get(a) != b) {
+            if (lastS[a] != lastT[b]) {
                 return false;
             }
 
-            if (mapTS.containsKey(b) && mapTS.get(b) != a) {
-                return false;
-            }
-
-            mapST.put(a, b);
-            mapTS.put(b, a);
+            lastS[a] = i + 1;
+            lastT[b] = i + 1;
         }
 
         return true;
