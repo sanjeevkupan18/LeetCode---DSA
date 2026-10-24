@@ -8,27 +8,24 @@ class Solution {
             return false;
         }
 
-        Map<Character, String> charToWord = new HashMap<>();
-        Map<String, Character> wordToChar = new HashMap<>();
+        Map<Character, String> map = new HashMap<>();
+        Set<String> usedWords = new HashSet<>();
 
         for (int i = 0; i < pattern.length(); i++) {
             char ch = pattern.charAt(i);
             String word = words[i];
 
-            if (charToWord.containsKey(ch)) {
-                if (!charToWord.get(ch).equals(word)) {
+            if (map.containsKey(ch)) {
+                if (!map.get(ch).equals(word)) {
                     return false;
                 }
             } else {
-                charToWord.put(ch, word);
-            }
+                if (usedWords.contains(word)) {
+                    return false;
+                }
 
-            if (wordToChar.containsKey(word)) {
-                if (wordToChar.get(word) != ch) {
-                    return false;
-                }
-            } else {
-                wordToChar.put(word, ch);
+                map.put(ch, word);
+                usedWords.add(word);
             }
         }
 
