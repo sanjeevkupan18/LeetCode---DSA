@@ -2,54 +2,45 @@ import java.util.*;
 
 class Solution {
     public String decodeString(String s) {
-        Stack<Character> stack = new Stack<>();
+        Stack<Integer> countStack = new Stack<>();
+        Stack<StringBuilder> stringStack = new Stack<>();
+
+        StringBuilder currentString = new StringBuilder();
+        int k = 0;
 
         for (char ch : s.toCharArray()) {
 
-            if (ch != ']') {
-                stack.push(ch);
+            if (Character.isDigit(ch)) {
+                // Build the repetition count
+                k = k * 10 + (ch - '0');
+
+            } else if (ch == '[') {
+                // Save the current decoding context
+                countStack.push(k);
+                stringStack.push(currentString);
+
+                // Start decoding the nested substring
+                currentString = new StringBuilder();
+                k = 0;
+
+            } else if (ch == ']') {
+                // Retrieve the repetition count and previous string
+                int repeat = countStack.pop();
+                StringBuilder previousString = stringStack.pop();
+
+                // Append the current substring 'repeat' times
+                for (int i = 0; i < repeat; i++) {
+                    previousString.append(currentString);
+                }
+
+                currentString = previousString;
+
             } else {
-                // Extract the encoded substring
-                StringBuilder decoded = new StringBuilder();
-
-                while (stack.peek() != '[') {
-                    decoded.append(stack.pop());
-                }
-
-                stack.pop(); // Remove '['
-
-                // Extract the repetition count
-                StringBuilder number = new StringBuilder();
-
-                while (!stack.isEmpty() &&
-                       Character.isDigit(stack.peek())) {
-                    number.append(stack.pop());
-                }
-
-                int k = Integer.parseInt(number.reverse().toString());
-
-                // Repeat the decoded substring
-                String repeated = decoded.reverse().toString();
-                StringBuilder result = new StringBuilder();
-
-                for (int i = 0; i < k; i++) {
-                    result.append(repeated);
-                }
-
-                // Push the expanded substring back onto the stack
-                for (char c : result.toString().toCharArray()) {
-                    stack.push(c);
-                }
+                // Append a regular character
+                currentString.append(ch);
             }
         }
 
-        // Construct the final decoded string
-        StringBuilder answer = new StringBuilder();
-
-        for (char ch : stack) {
-            answer.append(ch);
-        }
-
-        return answer.toString();
+        return currentString.toString();
     }
 }
