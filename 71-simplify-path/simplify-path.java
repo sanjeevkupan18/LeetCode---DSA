@@ -3,7 +3,7 @@ import java.util.*;
 class Solution {
     public String simplifyPath(String path) {
         String[] parts = path.split("/");
-        Stack<String> stack = new Stack<>();
+        Deque<String> stack = new ArrayDeque<>();
 
         for (String part : parts) {
             if (part.isEmpty() || part.equals(".")) {
@@ -12,13 +12,19 @@ class Solution {
 
             if (part.equals("..")) {
                 if (!stack.isEmpty()) {
-                    stack.pop();
+                    stack.removeLast();
                 }
             } else {
-                stack.push(part);
+                stack.addLast(part);
             }
         }
 
-        return "/" + String.join("/", stack);
+        StringBuilder result = new StringBuilder();
+
+        for (String directory : stack) {
+            result.append("/").append(directory);
+        }
+
+        return result.length() == 0 ? "/" : result.toString();
     }
 }
