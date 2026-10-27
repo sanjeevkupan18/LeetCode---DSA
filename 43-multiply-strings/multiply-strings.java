@@ -1,40 +1,51 @@
 class Solution {
     public String multiply(String num1, String num2) {
-        int n = num1.length();
-        int m = num2.length();
+        String result = "0";
 
-        if (num1.equals("0") || num2.equals("0")) {
-            return "0";
-        }
+        for (int i = num2.length() - 1; i >= 0; i--) {
+            int digit = num2.charAt(i) - '0';
+            String partial = "0";
 
-        int[] result = new int[n + m];
-
-        for (int i = n - 1; i >= 0; i--) {
-            int digit1 = num1.charAt(i) - '0';
-
-            for (int j = m - 1; j >= 0; j--) {
-                int digit2 = num2.charAt(j) - '0';
-
-                int product = digit1 * digit2
-                            + result[i + j + 1];
-
-                result[i + j + 1] = product % 10;
-                result[i + j] += product / 10;
+            // Multiply num1 by the current digit using repeated addition
+            for (int j = 0; j < digit; j++) {
+                partial = addStrings(partial, num1);
             }
+
+            // Append zeros only if the partial product is not zero
+            if (!partial.equals("0")) {
+                for (int k = 0; k < num2.length() - 1 - i; k++) {
+                    partial += "0";
+                }
+            }
+
+            result = addStrings(result, partial);
         }
 
-        StringBuilder answer = new StringBuilder();
-        int i = 0;
+        return result;
+    }
 
-        while (i < result.length && result[i] == 0) {
-            i++;
+    private String addStrings(String a, String b) {
+        StringBuilder sb = new StringBuilder();
+
+        int i = a.length() - 1;
+        int j = b.length() - 1;
+        int carry = 0;
+
+        while (i >= 0 || j >= 0 || carry != 0) {
+            int sum = carry;
+
+            if (i >= 0) {
+                sum += a.charAt(i--) - '0';
+            }
+
+            if (j >= 0) {
+                sum += b.charAt(j--) - '0';
+            }
+
+            sb.append(sum % 10);
+            carry = sum / 10;
         }
 
-        while (i < result.length) {
-            answer.append(result[i]);
-            i++;
-        }
-
-        return answer.toString();
+        return sb.reverse().toString();
     }
 }
