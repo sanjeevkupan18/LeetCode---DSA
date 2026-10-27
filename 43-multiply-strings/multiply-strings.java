@@ -10,30 +10,31 @@ class Solution {
         int[] result = new int[n + m];
 
         for (int i = n - 1; i >= 0; i--) {
+            int digit1 = num1.charAt(i) - '0';
+
             for (int j = m - 1; j >= 0; j--) {
-                int digit1 = num1.charAt(i) - '0';
                 int digit2 = num2.charAt(j) - '0';
 
-                int product = digit1 * digit2;
-                int sum = product + result[i + j + 1];
+                int product = digit1 * digit2
+                            + result[i + j + 1];
 
-                result[i + j + 1] = sum % 10;
-                result[i + j] += sum / 10;
+                result[i + j + 1] = product % 10;
+                result[i + j] += product / 10;
             }
         }
 
-        StringBuilder sb = new StringBuilder();
+        StringBuilder answer = new StringBuilder();
+        int i = 0;
 
-        int start = 0;
-
-        while (start < result.length && result[start] == 0) {
-            start++;
+        while (i < result.length && result[i] == 0) {
+            i++;
         }
 
-        for (int i = start; i < result.length; i++) {
-            sb.append(result[i]);
+        while (i < result.length) {
+            answer.append(result[i]);
+            i++;
         }
 
-        return sb.toString();
+        return answer.toString();
     }
 }
