@@ -1,18 +1,24 @@
 class Solution {
     public int countSubstrings(String s) {
+        int count = 0;
         int n = s.length();
-        boolean[][] dp = new boolean[n][n];
+
+        for (int i = 0; i < n; i++) {
+            count += expandAroundCenter(s, i, i);
+            count += expandAroundCenter(s, i, i + 1);
+        }
+
+        return count;
+    }
+
+    private int expandAroundCenter(String s, int left, int right) {
         int count = 0;
 
-        for (int i = n - 1; i >= 0; i--) {
-            for (int j = i; j < n; j++) {
-                if (s.charAt(i) == s.charAt(j)) {
-                    if (j - i <= 2 || dp[i + 1][j - 1]) {
-                        dp[i][j] = true;
-                        count++;
-                    }
-                }
-            }
+        while (left >= 0 && right < s.length()
+                && s.charAt(left) == s.charAt(right)) {
+            count++;
+            left--;
+            right++;
         }
 
         return count;
