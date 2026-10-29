@@ -3,29 +3,21 @@ import java.util.*;
 class Solution {
     public boolean wordBreak(String s, List<String> wordDict) {
         Set<String> dict = new HashSet<>(wordDict);
-        Boolean[] memo = new Boolean[s.length()];
 
-        return solve(s, 0, dict, memo);
-    }
+        int n = s.length();
+        boolean[] dp = new boolean[n + 1];
 
-    private boolean solve(String s, int start,
-                          Set<String> dict, Boolean[] memo) {
-        if (start == s.length()) {
-            return true;
-        }
+        dp[0] = true;
 
-        if (memo[start] != null) {
-            return memo[start];
-        }
-
-        for (int end = start + 1; end <= s.length(); end++) {
-            String word = s.substring(start, end);
-
-            if (dict.contains(word) && solve(s, end, dict, memo)) {
-                return memo[start] = true;
+        for (int i = 1; i <= n; i++) {
+            for (int j = 0; j < i; j++) {
+                if (dp[j] && dict.contains(s.substring(j, i))) {
+                    dp[i] = true;
+                    break;
+                }
             }
         }
 
-        return memo[start] = false;
+        return dp[n];
     }
 }
