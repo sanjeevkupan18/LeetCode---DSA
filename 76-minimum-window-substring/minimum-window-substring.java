@@ -1,25 +1,28 @@
 class Solution {
-
-    private boolean isValid(int[] window, int[] required) {
-        for (int i = 0; i < 128; i++) {
-            if (window[i] < required[i]) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
     public String minWindow(String s, String t) {
 
         int m = s.length();
+        int n = t.length();
 
-        int[] required = new int[128];
-        int[] window = new int[128];
+        if (m < n) {
+            return "";
+        }
+
+        int[] freq = new int[128];
 
         for (char c : t.toCharArray()) {
-            required[c]++;
+            freq[c]++;
         }
+
+        int required = 0;
+
+        for (int count : freq) {
+            if (count > 0) {
+                required++;
+            }
+        }
+
+        int formed = 0;
 
         int left = 0;
         int minLen = Integer.MAX_VALUE;
@@ -27,9 +30,14 @@ class Solution {
 
         for (int right = 0; right < m; right++) {
 
-            window[s.charAt(right)]++;
+            char c = s.charAt(right);
+            freq[c]--;
 
-            while (isValid(window, required)) {
+            if (freq[c] == 0) {
+                formed++;
+            }
+
+            while (formed == required) {
 
                 int len = right - left + 1;
 
@@ -38,7 +46,13 @@ class Solution {
                     start = left;
                 }
 
-                window[s.charAt(left)]--;
+                char leftChar = s.charAt(left);
+                freq[leftChar]++;
+
+                if (freq[leftChar] > 0) {
+                    formed--;
+                }
+
                 left++;
             }
         }
