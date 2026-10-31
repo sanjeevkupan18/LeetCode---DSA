@@ -1,56 +1,60 @@
-import java.util.Arrays;
-
 class Solution {
 
     public int minDistance(String word1, String word2) {
 
+        // Keep word2 as the shorter string
+        if (word1.length() < word2.length()) {
+            return minDistance(word2, word1);
+        }
+
         int m = word1.length();
         int n = word2.length();
 
-        int[][] dp = new int[m + 1][n + 1];
+        int[] prev = new int[n + 1];
+        int[] curr = new int[n + 1];
 
-        for (int[] row : dp) {
-            Arrays.fill(row, -1);
+        // Base case: converting empty word1 to word2
+        for (int j = 0; j <= n; j++) {
+            prev[j] = j;
         }
 
-        return solve(word1, word2, m, n, dp);
-    }
+        for (int i = 1; i <= m; i++) {
 
-    private int solve(String s1, String s2,
-                      int i, int j, int[][] dp) {
+            // Base case: converting word1 prefix to empty string
+            curr[0] = i;
 
-        // Base cases
-        if (i == 0) {
-            return j;
+            for (int j = 1; j <= n; j++) {
+
+                // Characters match
+                if (word1.charAt(i - 1) ==
+                    word2.charAt(j - 1)) {
+
+                    curr[j] = prev[j - 1];
+
+                } else {
+
+                    // Insert
+                    int insert = curr[j - 1];
+
+                    // Delete
+                    int delete = prev[j];
+
+                    // Replace
+                    int replace = prev[j - 1];
+
+                    curr[j] = 1 + Math.min(
+                        insert,
+                        Math.min(delete, replace)
+                    );
+                }
+            }
+
+            // Move current row to previous row
+            int[] temp = prev;
+            prev = curr;
+            curr = temp;
         }
 
-        if (j == 0) {
-            return i;
-        }
-
-        // Already calculated
-        if (dp[i][j] != -1) {
-            return dp[i][j];
-        }
-
-        // Characters match
-        if (s1.charAt(i - 1) == s2.charAt(j - 1)) {
-
-            return dp[i][j] =
-                solve(s1, s2, i - 1, j - 1, dp);
-        }
-
-        // Insert
-        int insert = solve(s1, s2, i, j - 1, dp);
-
-        // Delete
-        int delete = solve(s1, s2, i - 1, j, dp);
-
-        // Replace
-        int replace = solve(s1, s2, i - 1, j - 1, dp);
-
-        return dp[i][j] =
-            1 + Math.min(insert,
-                Math.min(delete, replace));
+        return prev[n];
     }
 }
