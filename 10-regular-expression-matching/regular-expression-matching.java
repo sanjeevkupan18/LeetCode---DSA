@@ -1,34 +1,61 @@
 class Solution {
 
+    int[][] dp;
+
     public boolean isMatch(String s, String p) {
+
+        int n = s.length();
+        int m = p.length();
+
+        dp = new int[n + 1][m + 1];
+
+        for (int[] row : dp) {
+            java.util.Arrays.fill(row, -1);
+        }
+
         return solve(s, p, 0, 0);
     }
 
     private boolean solve(String s, String p, int i, int j) {
 
-        // Pattern completely processed
+        // Base case
         if (j == p.length()) {
             return i == s.length();
         }
 
-        // Check whether current characters match
+        // Already calculated
+        if (dp[i][j] != -1) {
+            return dp[i][j] == 1;
+        }
+
+        // Check current character matching
         boolean firstMatch = (i < s.length()) &&
                 (s.charAt(i) == p.charAt(j) || p.charAt(j) == '.');
 
-        // If next character is '*'
+        boolean ans;
+
+        // Check whether next pattern character is '*'
         if (j + 1 < p.length() && p.charAt(j + 1) == '*') {
 
-            // Option 1: Match zero occurrences
+            // Zero occurrences
             boolean skip = solve(s, p, i, j + 2);
 
-            // Option 2: Match one or more occurrences
+            // One or more occurrences
             boolean take = firstMatch &&
                     solve(s, p, i + 1, j);
 
-            return skip || take;
+            ans = skip || take;
+
+        } else {
+
+            // Normal matching
+            ans = firstMatch &&
+                    solve(s, p, i + 1, j + 1);
         }
 
-        // Normal character or '.'
-        return firstMatch && solve(s, p, i + 1, j + 1);
+        // Store result
+        dp[i][j] = ans ? 1 : 0;
+
+        return ans;
     }
 }
