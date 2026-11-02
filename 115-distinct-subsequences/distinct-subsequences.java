@@ -4,36 +4,30 @@ class Solution {
         int n = s.length();
         int m = t.length();
 
-        Integer[][] dp = new Integer[n + 1][m + 1];
+        int[][] dp = new int[n + 1][m + 1];
 
-        return solve(0, 0, s, t, dp);
-    }
-
-    private int solve(int i, int j, String s, String t,
-                      Integer[][] dp) {
-
-        if (j == t.length()) {
-            return 1;
+        // Base case
+        for (int i = 0; i <= n; i++) {
+            dp[i][0] = 1;
         }
 
-        if (i == s.length()) {
-            return 0;
+        // Fill DP table
+        for (int i = 1; i <= n; i++) {
+
+            for (int j = 1; j <= m; j++) {
+
+                if (s.charAt(i - 1) == t.charAt(j - 1)) {
+
+                    dp[i][j] = dp[i - 1][j - 1]
+                             + dp[i - 1][j];
+
+                } else {
+
+                    dp[i][j] = dp[i - 1][j];
+                }
+            }
         }
 
-        if (dp[i][j] != null) {
-            return dp[i][j];
-        }
-
-        if (s.charAt(i) == t.charAt(j)) {
-
-            dp[i][j] = solve(i + 1, j + 1, s, t, dp)
-                     + solve(i + 1, j, s, t, dp);
-
-        } else {
-
-            dp[i][j] = solve(i + 1, j, s, t, dp);
-        }
-
-        return dp[i][j];
+        return dp[n][m];
     }
 }
