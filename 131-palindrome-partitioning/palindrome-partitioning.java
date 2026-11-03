@@ -2,41 +2,34 @@ class Solution {
 
     public List<List<String>> partition(String s) {
         List<List<String>> result = new ArrayList<>();
-        List<String> path = new ArrayList<>();
 
-        generate(s, 0, path, result);
+        backtrack(s, 0, new ArrayList<>(), result);
 
         return result;
     }
 
-    private void generate(String s, int index,
-                          List<String> path,
-                          List<List<String>> result) {
+    private void backtrack(String s, int index,
+                           List<String> path,
+                           List<List<String>> result) {
 
         if (index == s.length()) {
-            if (isValid(path)) {
-                result.add(new ArrayList<>(path));
-            }
+            result.add(new ArrayList<>(path));
             return;
         }
 
         for (int i = index; i < s.length(); i++) {
 
-            path.add(s.substring(index, i + 1));
+            String substring = s.substring(index, i + 1);
 
-            generate(s, i + 1, path, result);
+            if (isPalindrome(substring)) {
 
-            path.remove(path.size() - 1);
-        }
-    }
+                path.add(substring);
 
-    private boolean isValid(List<String> path) {
-        for (String str : path) {
-            if (!isPalindrome(str)) {
-                return false;
+                backtrack(s, i + 1, path, result);
+
+                path.remove(path.size() - 1);
             }
         }
-        return true;
     }
 
     private boolean isPalindrome(String s) {
