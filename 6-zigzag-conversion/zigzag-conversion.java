@@ -6,41 +6,32 @@ class Solution {
             return s;
         }
 
-        int cycleLen = 2 * numRows - 2;
-        int cols = (n / cycleLen + 1) * (numRows - 1);
+        StringBuilder[] rows = new StringBuilder[numRows];
 
-        char[][] matrix = new char[numRows][cols];
+        for (int i = 0; i < numRows; i++) {
+            rows[i] = new StringBuilder();
+        }
 
-        int row = 0, col = 0;
-        int index = 0;
+        int currentRow = 0;
+        int direction = 1;
 
-        while (index < n) {
+        for (int i = 0; i < n; i++) {
 
-            // Move vertically downward
-            while (row < numRows && index < n) {
-                matrix[row][col] = s.charAt(index++);
-                row++;
+            rows[currentRow].append(s.charAt(i));
+
+            if (currentRow == 0) {
+                direction = 1;
+            } else if (currentRow == numRows - 1) {
+                direction = -1;
             }
 
-            row -= 2;
-            col++;
-
-            // Move diagonally upward
-            while (row > 0 && index < n) {
-                matrix[row][col] = s.charAt(index++);
-                row--;
-                col++;
-            }
+            currentRow += direction;
         }
 
         StringBuilder result = new StringBuilder();
 
-        for (int i = 0; i < numRows; i++) {
-            for (int j = 0; j < cols; j++) {
-                if (matrix[i][j] != '\0') {
-                    result.append(matrix[i][j]);
-                }
-            }
+        for (StringBuilder row : rows) {
+            result.append(row);
         }
 
         return result.toString();
