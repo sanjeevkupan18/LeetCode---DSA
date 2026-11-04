@@ -6,32 +6,26 @@ class Solution {
             return s;
         }
 
-        StringBuilder[] rows = new StringBuilder[numRows];
-
-        for (int i = 0; i < numRows; i++) {
-            rows[i] = new StringBuilder();
-        }
-
-        int currentRow = 0;
-        int direction = 1;
-
-        for (int i = 0; i < n; i++) {
-
-            rows[currentRow].append(s.charAt(i));
-
-            if (currentRow == 0) {
-                direction = 1;
-            } else if (currentRow == numRows - 1) {
-                direction = -1;
-            }
-
-            currentRow += direction;
-        }
-
         StringBuilder result = new StringBuilder();
 
-        for (StringBuilder row : rows) {
-            result.append(row);
+        int cycleLen = 2 * numRows - 2;
+
+        for (int row = 0; row < numRows; row++) {
+
+            for (int j = 0; j + row < n; j += cycleLen) {
+
+                // Vertical character
+                result.append(s.charAt(j + row));
+
+                // Diagonal character (middle rows only)
+                int diagonalIndex = j + cycleLen - row;
+
+                if (row != 0 && row != numRows - 1
+                        && diagonalIndex < n) {
+
+                    result.append(s.charAt(diagonalIndex));
+                }
+            }
         }
 
         return result.toString();
