@@ -3,69 +3,70 @@ class Solution {
     public int ladderLength(String beginWord, String endWord,
                             List<String> wordList) {
 
-        Set<String> set = new HashSet<>(wordList);
+        Set<String> dict = new HashSet<>(wordList);
 
-        if (!set.contains(endWord)) {
+        if (!dict.contains(endWord)) {
             return 0;
         }
 
-        Map<String, List<String>> map = new HashMap<>();
+        Set<String> beginSet = new HashSet<>();
+        Set<String> endSet = new HashSet<>();
 
-        for (String word : wordList) {
+        beginSet.add(beginWord);
+        endSet.add(endWord);
 
-            for (int i = 0; i < word.length(); i++) {
-
-                String pattern =
-                    word.substring(0, i) + "*" +
-                    word.substring(i + 1);
-
-                map.computeIfAbsent(pattern,
-                    k -> new ArrayList<>()).add(word);
-            }
-        }
-
-        Queue<String> queue = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
-
-        queue.offer(beginWord);
-        visited.add(beginWord);
+        dict.remove(beginWord);
+        dict.remove(endWord);
 
         int steps = 1;
 
-        while (!queue.isEmpty()) {
+        while (!beginSet.isEmpty() && !endSet.isEmpty()) {
 
-            int size = queue.size();
+            // Always expand the smaller frontier.
+            if (beginSet.size() > endSet.size()) {
 
-            for (int i = 0; i < size; i++) {
+                Set<String> temp = beginSet;
+                beginSet = endSet;
+                endSet = temp;
+            }
 
-                String word = queue.poll();
+            Set<String> nextSet = new HashSet<>();
 
-                if (word.equals(endWord)) {
-                    return steps;
-                }
+            for (String word : beginSet) {
 
-                for (int j = 0; j < word.length(); j++) {
+                char[] chars = word.toCharArray();
 
-                    String pattern =
-                        word.substring(0, j) + "*" +
-                        word.substring(j + 1);
+                for (int i = 0; i < chars.length; i++) {
 
-                    for (String neighbor :
-                         map.getOrDefault(pattern,
-                             new ArrayList<>())) {
+                    char original = chars[i];
 
-                        if (!visited.contains(neighbor)) {
+                    for (char ch = 'a'; ch <= 'z'; ch++) {
 
-                            visited.add(neighbor);
-                            queue.offer(neighbor);
+                        if (ch == original) {
+                            continue;
+                        }
+
+                        chars[i] = ch;
+
+                        String newWord = new String(chars);
+
+                        // Both searches have met.
+                        if (endSet.contains(newWord)) {
+                            return steps + 1;
+                        }
+
+                        if (dict.contains(newWord)) {
+
+                            nextSet.add(newWord);
+                            dict.remove(newWord);
                         }
                     }
 
-                    // Avoid processing the same pattern again.
-                    map.remove(pattern);
+                    chars[i] = original;
                 }
             }
 
+            beginSet = nextSet;
             steps++;
         }
 
