@@ -1,4 +1,5 @@
 class Solution {
+
     public int ladderLength(String beginWord, String endWord,
                             List<String> wordList) {
 
@@ -8,10 +9,26 @@ class Solution {
             return 0;
         }
 
-        Queue<String> queue = new LinkedList<>();
-        queue.offer(beginWord);
+        Map<String, List<String>> map = new HashMap<>();
 
-        set.remove(beginWord);
+        for (String word : wordList) {
+
+            for (int i = 0; i < word.length(); i++) {
+
+                String pattern =
+                    word.substring(0, i) + "*" +
+                    word.substring(i + 1);
+
+                map.computeIfAbsent(pattern,
+                    k -> new ArrayList<>()).add(word);
+            }
+        }
+
+        Queue<String> queue = new LinkedList<>();
+        Set<String> visited = new HashSet<>();
+
+        queue.offer(beginWord);
+        visited.add(beginWord);
 
         int steps = 1;
 
@@ -22,29 +39,30 @@ class Solution {
             for (int i = 0; i < size; i++) {
 
                 String word = queue.poll();
-                char[] chars = word.toCharArray();
 
-                for (int j = 0; j < chars.length; j++) {
+                if (word.equals(endWord)) {
+                    return steps;
+                }
 
-                    char original = chars[j];
+                for (int j = 0; j < word.length(); j++) {
 
-                    for (char ch = 'a'; ch <= 'z'; ch++) {
+                    String pattern =
+                        word.substring(0, j) + "*" +
+                        word.substring(j + 1);
 
-                        chars[j] = ch;
+                    for (String neighbor :
+                         map.getOrDefault(pattern,
+                             new ArrayList<>())) {
 
-                        String newWord = new String(chars);
+                        if (!visited.contains(neighbor)) {
 
-                        if (newWord.equals(endWord)) {
-                            return steps + 1;
-                        }
-
-                        if (set.contains(newWord)) {
-                            queue.offer(newWord);
-                            set.remove(newWord);
+                            visited.add(neighbor);
+                            queue.offer(neighbor);
                         }
                     }
 
-                    chars[j] = original;
+                    // Avoid processing the same pattern again.
+                    map.remove(pattern);
                 }
             }
 
