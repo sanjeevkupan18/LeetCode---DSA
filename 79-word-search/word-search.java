@@ -4,12 +4,10 @@ class Solution {
         int m = board.length;
         int n = board[0].length;
 
-        boolean[][] visited = new boolean[m][n];
-
         for (int i = 0; i < m; i++) {
             for (int j = 0; j < n; j++) {
 
-                if (dfs(board, word, visited, i, j, 0)) {
+                if (dfs(board, word, i, j, 0)) {
                     return true;
                 }
             }
@@ -19,7 +17,6 @@ class Solution {
     }
 
     private boolean dfs(char[][] board, String word,
-                        boolean[][] visited,
                         int r, int c, int index) {
 
         if (index == word.length()) {
@@ -28,21 +25,24 @@ class Solution {
 
         if (r < 0 || c < 0 ||
             r >= board.length || c >= board[0].length ||
-            visited[r][c] ||
             board[r][c] != word.charAt(index)) {
 
             return false;
         }
 
-        visited[r][c] = true;
+        char temp = board[r][c];
+
+        // Mark current cell as visited
+        board[r][c] = '#';
 
         boolean found =
-            dfs(board, word, visited, r + 1, c, index + 1) ||
-            dfs(board, word, visited, r - 1, c, index + 1) ||
-            dfs(board, word, visited, r, c + 1, index + 1) ||
-            dfs(board, word, visited, r, c - 1, index + 1);
+            dfs(board, word, r + 1, c, index + 1) ||
+            dfs(board, word, r - 1, c, index + 1) ||
+            dfs(board, word, r, c + 1, index + 1) ||
+            dfs(board, word, r, c - 1, index + 1);
 
-        visited[r][c] = false;
+        // Restore original character
+        board[r][c] = temp;
 
         return found;
     }
