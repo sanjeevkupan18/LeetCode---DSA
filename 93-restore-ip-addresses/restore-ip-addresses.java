@@ -3,22 +3,27 @@ class Solution {
         List<String> result = new ArrayList<>();
         int n = s.length();
 
-        for (int i = 1; i <= 3 && i < n; i++) {
-            for (int j = i + 1; j <= i + 3 && j < n; j++) {
-                for (int k = j + 1; k <= j + 3 && k < n; k++) {
-                    int l = n - k;
+        if (n < 4 || n > 12) {
+            return result;
+        }
 
-                    if (l < 1 || l > 3) {
-                        continue;
-                    }
+        for (int i = 1; i <= 3 && i <= n - 3; i++) {
+            String a = s.substring(0, i);
 
-                    String a = s.substring(0, i);
-                    String b = s.substring(i, j);
+            if (!isValid(a)) continue;
+
+            for (int j = i + 1; j <= i + 3 && j <= n - 2; j++) {
+                String b = s.substring(i, j);
+
+                if (!isValid(b)) continue;
+
+                for (int k = j + 1; k <= j + 3 && k <= n - 1; k++) {
                     String c = s.substring(j, k);
                     String d = s.substring(k);
 
-                    if (isValid(a) && isValid(b)
-                            && isValid(c) && isValid(d)) {
+                    if (d.length() > 3) continue;
+
+                    if (isValid(c) && isValid(d)) {
                         result.add(a + "." + b + "." + c + "." + d);
                     }
                 }
@@ -29,11 +34,16 @@ class Solution {
     }
 
     private boolean isValid(String part) {
+        if (part.length() == 0 || part.length() > 3) {
+            return false;
+        }
+
         if (part.length() > 1 && part.charAt(0) == '0') {
             return false;
         }
 
         int num = Integer.parseInt(part);
-        return num >= 0 && num <= 255;
+
+        return num <= 255;
     }
 }
