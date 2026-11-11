@@ -1,23 +1,19 @@
 class Solution {
     public String convertToTitle(int columnNumber) {
-        char[] result = new char[10];
-        int index = 0;
+        StringBuilder result = new StringBuilder();
 
         while (columnNumber > 0) {
             columnNumber--;
 
             int remainder = columnNumber % 26;
-            result[index++] = (char) ('A' + remainder);
+
+            char ch = (char) ('A' + remainder);
+
+            result.append(ch);
 
             columnNumber /= 26;
         }
 
-        StringBuilder answer = new StringBuilder();
-
-        for (int i = index - 1; i >= 0; i--) {
-            answer.append(result[i]);
-        }
-
-        return answer.toString();
+        return result.reverse().toString();
     }
 }
