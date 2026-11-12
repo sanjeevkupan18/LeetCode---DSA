@@ -1,25 +1,18 @@
 class Solution {
     public ListNode reverseList(ListNode head) {
-        ArrayList<Integer> list = new ArrayList<>();
 
-        ListNode temp = head;
-
-        // Store all values
-        while (temp != null) {
-            list.add(temp.val);
-            temp = temp.next;
+        // Base condition
+        if (head == null || head.next == null) {
+            return head;
         }
 
-        // Replace values in reverse order
-        temp = head;
-        int i = list.size() - 1;
+        // Reverse the remaining list
+        ListNode newHead = reverseList(head.next);
 
-        while (temp != null) {
-            temp.val = list.get(i);
-            i--;
-            temp = temp.next;
-        }
+        // Reverse the current link
+        head.next.next = head;
+        head.next = null;
 
-        return head;
+        return newHead;
     }
 }
