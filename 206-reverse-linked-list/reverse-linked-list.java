@@ -1,18 +1,22 @@
 class Solution {
     public ListNode reverseList(ListNode head) {
 
-        // Base condition
-        if (head == null || head.next == null) {
-            return head;
+        ListNode prev = null;
+        ListNode curr = head;
+
+        while (curr != null) {
+
+            // Store next node
+            ListNode next = curr.next;
+
+            // Reverse the link
+            curr.next = prev;
+
+            // Move pointers forward
+            prev = curr;
+            curr = next;
         }
 
-        // Reverse the remaining list
-        ListNode newHead = reverseList(head.next);
-
-        // Reverse the current link
-        head.next.next = head;
-        head.next = null;
-
-        return newHead;
+        return prev;
     }
 }
