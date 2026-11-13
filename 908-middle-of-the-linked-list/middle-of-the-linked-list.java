@@ -1,25 +1,13 @@
 class Solution {
     public ListNode middleNode(ListNode head) {
-        int length = 0;
+        ListNode slow = head;
+        ListNode fast = head;
 
-        ListNode curr = head;
-
-        // First traversal: Calculate length
-        while (curr != null) {
-            length++;
-            curr = curr.next;
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        int mid = length / 2;
-
-        curr = head;
-
-        // Second traversal: Find middle node
-        while (mid > 0) {
-            curr = curr.next;
-            mid--;
-        }
-
-        return curr;
+        return slow;
     }
 }
