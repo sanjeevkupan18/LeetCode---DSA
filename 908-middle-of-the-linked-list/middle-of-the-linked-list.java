@@ -1,14 +1,25 @@
 class Solution {
     public ListNode middleNode(ListNode head) {
-        ArrayList<ListNode> list = new ArrayList<>();
+        int length = 0;
 
         ListNode curr = head;
 
+        // First traversal: Calculate length
         while (curr != null) {
-            list.add(curr);
+            length++;
             curr = curr.next;
         }
 
-        return list.get(list.size() / 2);
+        int mid = length / 2;
+
+        curr = head;
+
+        // Second traversal: Find middle node
+        while (mid > 0) {
+            curr = curr.next;
+            mid--;
+        }
+
+        return curr;
     }
 }
