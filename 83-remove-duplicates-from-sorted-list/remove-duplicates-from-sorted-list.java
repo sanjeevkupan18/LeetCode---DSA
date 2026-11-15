@@ -1,19 +1,18 @@
+import java.util.HashSet;
+
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
+        HashSet<Integer> set = new HashSet<>();
+
         ListNode curr = head;
+        ListNode prev = null;
 
         while (curr != null) {
-            ListNode prev = curr;
-            ListNode next = curr.next;
-
-            while (next != null) {
-                if (next.val == curr.val) {
-                    prev.next = next.next;
-                    next = prev.next;
-                } else {
-                    prev = next;
-                    next = next.next;
-                }
+            if (set.contains(curr.val)) {
+                prev.next = curr.next;
+            } else {
+                set.add(curr.val);
+                prev = curr;
             }
 
             curr = curr.next;
