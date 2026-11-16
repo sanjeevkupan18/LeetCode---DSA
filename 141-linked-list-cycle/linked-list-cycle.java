@@ -1,14 +1,15 @@
 class Solution {
     public boolean hasCycle(ListNode head) {
-        ListNode temp = head;
+        ListNode slow = head;
+        ListNode fast = head;
 
-        while (temp != null) {
-            if (temp.val == Integer.MIN_VALUE) {
+        while (fast != null && fast.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
+
+            if (slow == fast) {
                 return true;
             }
-
-            temp.val = Integer.MIN_VALUE;
-            temp = temp.next;
         }
 
         return false;
