@@ -1,17 +1,13 @@
-import java.util.*;
-
 class Solution {
     public boolean hasCycle(ListNode head) {
-        HashSet<ListNode> set = new HashSet<>();
-
         ListNode temp = head;
 
         while (temp != null) {
-            if (set.contains(temp)) {
+            if (temp.val == Integer.MIN_VALUE) {
                 return true;
             }
 
-            set.add(temp);
+            temp.val = Integer.MIN_VALUE;
             temp = temp.next;
         }
 
