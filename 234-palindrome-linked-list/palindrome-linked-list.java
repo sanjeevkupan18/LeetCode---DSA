@@ -7,40 +7,34 @@ class Solution {
         ListNode slow = head;
         ListNode fast = head;
 
-        // Find the middle
+        // Find the middle of the linked list
         while (fast != null && fast.next != null) {
             slow = slow.next;
             fast = fast.next.next;
         }
 
-        // For even length, slow is at the start of second half
-        // For odd length, skip the middle node
+        // Skip middle node in odd-length list
         if (fast != null) {
             slow = slow.next;
         }
 
-        // Reverse second half
+        // Reverse the second half
         ListNode secondHalf = reverse(slow);
 
         ListNode firstHalf = head;
         ListNode second = secondHalf;
 
-        boolean palindrome = true;
-
+        // Compare both halves
         while (second != null) {
             if (firstHalf.val != second.val) {
-                palindrome = false;
-                break;
+                return false;
             }
 
             firstHalf = firstHalf.next;
             second = second.next;
         }
 
-        // Restore the original linked list
-        reverse(secondHalf);
-
-        return palindrome;
+        return true;
     }
 
     private ListNode reverse(ListNode head) {
