@@ -1,28 +1,20 @@
-import java.util.HashSet;
-
 public class Solution {
     public ListNode getIntersectionNode(ListNode headA, ListNode headB) {
 
-        HashSet<ListNode> set = new HashSet<>();
-
-        ListNode tempA = headA;
-
-        while (tempA != null) {
-            set.add(tempA);
-            tempA = tempA.next;
+        if (headA == null || headB == null) {
+            return null;
         }
 
-        ListNode tempB = headB;
+        ListNode pA = headA;
+        ListNode pB = headB;
 
-        while (tempB != null) {
+        while (pA != pB) {
 
-            if (set.contains(tempB)) {
-                return tempB;
-            }
+            pA = (pA == null) ? headB : pA.next;
 
-            tempB = tempB.next;
+            pB = (pB == null) ? headA : pB.next;
         }
 
-        return null;
+        return pA;
     }
 }
