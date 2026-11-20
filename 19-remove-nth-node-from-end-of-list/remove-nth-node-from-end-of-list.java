@@ -1,30 +1,32 @@
+import java.util.Stack;
+
 class Solution {
     public ListNode removeNthFromEnd(ListNode head, int n) {
-        int length = 0;
+        Stack<ListNode> stack = new Stack<>();
+
         ListNode temp = head;
 
-        // Calculate the length
+        // Push all nodes into stack
         while (temp != null) {
-            length++;
+            stack.push(temp);
             temp = temp.next;
+        }
+
+        // Remove n nodes from stack
+        for (int i = 0; i < n; i++) {
+            stack.pop();
         }
 
         // If head needs to be removed
-        if (length == n) {
+        if (stack.isEmpty()) {
             return head.next;
         }
 
-        // Find the node before the target
-        temp = head;
-        int steps = length - n - 1;
-
-        while (steps > 0) {
-            temp = temp.next;
-            steps--;
-        }
+        // Get previous node
+        ListNode prev = stack.peek();
 
         // Remove the target node
-        temp.next = temp.next.next;
+        prev.next = prev.next.next;
 
         return head;
     }
