@@ -4,26 +4,18 @@ class Solution {
             return null;
         }
 
-        int length = 0;
-        ListNode curr = head;
+        ListNode slow = head;
+        ListNode fast = head;
+        ListNode prev = null;
 
-        // First pass: Calculate length
-        while (curr != null) {
-            length++;
-            curr = curr.next;
-        }
-
-        int mid = length / 2;
-
-        curr = head;
-
-        // Second pass: Reach node before middle
-        for (int i = 0; i < mid - 1; i++) {
-            curr = curr.next;
+        while (fast != null && fast.next != null) {
+            prev = slow;
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
         // Delete middle node
-        curr.next = curr.next.next;
+        prev.next = slow.next;
 
         return head;
     }
