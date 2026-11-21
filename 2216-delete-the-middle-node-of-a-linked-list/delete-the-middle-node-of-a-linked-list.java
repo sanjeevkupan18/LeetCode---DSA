@@ -4,19 +4,26 @@ class Solution {
             return null;
         }
 
-        ArrayList<ListNode> list = new ArrayList<>();
-
+        int length = 0;
         ListNode curr = head;
 
+        // First pass: Calculate length
         while (curr != null) {
-            list.add(curr);
+            length++;
             curr = curr.next;
         }
 
-        int mid = list.size() / 2;
+        int mid = length / 2;
 
-        ListNode prev = list.get(mid - 1);
-        prev.next = list.get(mid).next;
+        curr = head;
+
+        // Second pass: Reach node before middle
+        for (int i = 0; i < mid - 1; i++) {
+            curr = curr.next;
+        }
+
+        // Delete middle node
+        curr.next = curr.next.next;
 
         return head;
     }
