@@ -1,25 +1,29 @@
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        HashMap<Integer, Integer> map = new HashMap<>();
+        HashSet<Integer> duplicates = new HashSet<>();
 
         ListNode curr = head;
 
-        // Count frequency of each value
-        while (curr != null) {
-            map.put(curr.val, map.getOrDefault(curr.val, 0) + 1);
+        // First pass: identify duplicate values
+        while (curr != null && curr.next != null) {
+            if (curr.val == curr.next.val) {
+                duplicates.add(curr.val);
+            }
             curr = curr.next;
         }
 
         ListNode dummy = new ListNode(0);
-        ListNode tail = dummy;
+        dummy.next = head;
 
+        ListNode prev = dummy;
         curr = head;
 
-        // Keep only nodes appearing once
+        // Second pass: remove duplicate nodes
         while (curr != null) {
-            if (map.get(curr.val) == 1) {
-                tail.next = new ListNode(curr.val);
-                tail = tail.next;
+            if (duplicates.contains(curr.val)) {
+                prev.next = curr.next;
+            } else {
+                prev = curr;
             }
 
             curr = curr.next;
