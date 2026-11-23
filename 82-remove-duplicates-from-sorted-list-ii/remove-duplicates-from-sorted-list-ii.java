@@ -1,28 +1,27 @@
 class Solution {
     public ListNode deleteDuplicates(ListNode head) {
-        HashSet<Integer> duplicates = new HashSet<>();
-
-        ListNode curr = head;
-
-        // First pass: identify duplicate values
-        while (curr != null && curr.next != null) {
-            if (curr.val == curr.next.val) {
-                duplicates.add(curr.val);
-            }
-            curr = curr.next;
-        }
-
         ListNode dummy = new ListNode(0);
         dummy.next = head;
 
         ListNode prev = dummy;
-        curr = head;
+        ListNode curr = head;
 
-        // Second pass: remove duplicate nodes
         while (curr != null) {
-            if (duplicates.contains(curr.val)) {
+
+            // Check whether current value is duplicated
+            if (curr.next != null && curr.val == curr.next.val) {
+
+                // Skip all nodes with the duplicate value
+                while (curr.next != null &&
+                       curr.val == curr.next.val) {
+                    curr = curr.next;
+                }
+
+                // Remove all occurrences of this value
                 prev.next = curr.next;
+
             } else {
+                // Current value is unique
                 prev = curr;
             }
 
