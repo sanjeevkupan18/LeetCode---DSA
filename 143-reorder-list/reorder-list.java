@@ -4,30 +4,29 @@ class Solution {
             return;
         }
 
-        List<ListNode> list = new ArrayList<>();
+        Stack<ListNode> stack = new Stack<>();
 
         ListNode curr = head;
 
         while (curr != null) {
-            list.add(curr);
+            stack.push(curr);
             curr = curr.next;
         }
 
-        int left = 0;
-        int right = list.size() - 1;
+        int size = stack.size();
+        curr = head;
 
-        while (left < right) {
-            list.get(left).next = list.get(right);
-            left++;
+        for (int i = 0; i < size / 2; i++) {
+            ListNode last = stack.pop();
 
-            if (left == right) {
-                break;
-            }
+            ListNode next = curr.next;
 
-            list.get(right).next = list.get(left);
-            right--;
+            curr.next = last;
+            last.next = next;
+
+            curr = next;
         }
 
-        list.get(left).next = null;
+        curr.next = null;
     }
 }
