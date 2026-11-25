@@ -4,29 +4,41 @@ class Solution {
             return;
         }
 
-        Stack<ListNode> stack = new Stack<>();
+        // Step 1: Find the middle
+        ListNode slow = head;
+        ListNode fast = head;
 
-        ListNode curr = head;
-
-        while (curr != null) {
-            stack.push(curr);
-            curr = curr.next;
+        while (fast.next != null && fast.next.next != null) {
+            slow = slow.next;
+            fast = fast.next.next;
         }
 
-        int size = stack.size();
-        curr = head;
+        // Step 2: Reverse the second half
+        ListNode second = slow.next;
+        slow.next = null;
 
-        for (int i = 0; i < size / 2; i++) {
-            ListNode last = stack.pop();
+        ListNode prev = null;
 
-            ListNode next = curr.next;
-
-            curr.next = last;
-            last.next = next;
-
-            curr = next;
+        while (second != null) {
+            ListNode next = second.next;
+            second.next = prev;
+            prev = second;
+            second = next;
         }
 
-        curr.next = null;
+        // Step 3: Merge both halves
+        ListNode first = head;
+        second = prev;
+
+        while (second != null) {
+            ListNode temp1 = first.next;
+            ListNode temp2 = second.next;
+
+            first.next = second;
+            second.next = temp1;
+
+            first = temp1;
+            second = temp2;
+        }
     }
 }
