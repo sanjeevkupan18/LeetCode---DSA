@@ -5,33 +5,22 @@ class Solution {
             return head;
         }
 
-        ListNode oddDummy = new ListNode(0);
-        ListNode evenDummy = new ListNode(0);
+        ListNode odd = head;
+        ListNode even = head.next;
 
-        ListNode odd = oddDummy;
-        ListNode even = evenDummy;
+        ListNode evenHead = even;
 
-        ListNode curr = head;
+        while (even != null && even.next != null) {
 
-        int index = 1;
+            odd.next = even.next;
+            odd = odd.next;
 
-        while (curr != null) {
-
-            if (index % 2 == 1) {
-                odd.next = curr;
-                odd = odd.next;
-            } else {
-                even.next = curr;
-                even = even.next;
-            }
-
-            curr = curr.next;
-            index++;
+            even.next = odd.next;
+            even = even.next;
         }
 
-        odd.next = evenDummy.next;
-        even.next = null;
+        odd.next = evenHead;
 
-        return oddDummy.next;
+        return head;
     }
 }
