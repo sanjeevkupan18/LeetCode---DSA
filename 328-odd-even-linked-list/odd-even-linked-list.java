@@ -5,37 +5,33 @@ class Solution {
             return head;
         }
 
-        List<Integer> odd = new ArrayList<>();
-        List<Integer> even = new ArrayList<>();
+        ListNode oddDummy = new ListNode(0);
+        ListNode evenDummy = new ListNode(0);
 
-        int index = 1;
+        ListNode odd = oddDummy;
+        ListNode even = evenDummy;
 
         ListNode curr = head;
+
+        int index = 1;
 
         while (curr != null) {
 
             if (index % 2 == 1) {
-                odd.add(curr.val);
+                odd.next = curr;
+                odd = odd.next;
             } else {
-                even.add(curr.val);
+                even.next = curr;
+                even = even.next;
             }
 
             curr = curr.next;
             index++;
         }
 
-        curr = head;
+        odd.next = evenDummy.next;
+        even.next = null;
 
-        for (int val : odd) {
-            curr.val = val;
-            curr = curr.next;
-        }
-
-        for (int val : even) {
-            curr.val = val;
-            curr = curr.next;
-        }
-
-        return head;
+        return oddDummy.next;
     }
 }
