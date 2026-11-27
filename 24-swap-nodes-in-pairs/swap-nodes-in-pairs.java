@@ -4,27 +4,13 @@ class Solution {
             return head;
         }
 
-        ArrayList<ListNode> list = new ArrayList<>();
+        ListNode first = head;
+        ListNode second = head.next;
 
-        ListNode curr = head;
+        first.next = swapPairs(second.next);
 
-        while (curr != null) {
-            list.add(curr);
-            curr = curr.next;
-        }
+        second.next = first;
 
-        for (int i = 0; i + 1 < list.size(); i += 2) {
-            ListNode temp = list.get(i);
-            list.set(i, list.get(i + 1));
-            list.set(i + 1, temp);
-        }
-
-        for (int i = 0; i < list.size() - 1; i++) {
-            list.get(i).next = list.get(i + 1);
-        }
-
-        list.get(list.size() - 1).next = null;
-
-        return list.get(0);
+        return second;
     }
 }
